@@ -88,9 +88,40 @@ namespace 角から生えるやつ
         private void AdjustWindowLocation()
         {
             var factor = GetDpiScaleFactor();
-            var h = Screen.PrimaryScreen.WorkingArea.Height / factor.Y;
-            Left = 0;
-            Top = (double)h - this.Height;
+            if (Screen.PrimaryScreen.Bounds.Width == Screen.PrimaryScreen.WorkingArea.Width)
+            {
+                // タスクバーは上か下
+                Left = 0;
+                if (Screen.PrimaryScreen.WorkingArea.Top == 0)
+                {
+                    // タスクバーは下
+                    var h = Screen.PrimaryScreen.WorkingArea.Height / factor.Y;
+                    Top = (double)h - this.Height;
+                }
+                else
+                {
+                    // タスクバーは上
+                    var h = Screen.PrimaryScreen.Bounds.Height / factor.Y;
+                    Top = (double)h - this.Height;
+                }
+            }
+            else
+            {
+                // タスクバーは左か右
+                var h = Screen.PrimaryScreen.Bounds.Height / factor.Y;
+                Top = (double)h - this.Height;
+                Left = 0;
+                if (Screen.PrimaryScreen.Bounds.Left == 0)
+                {
+                    // タスクバーは左
+                    Left = Screen.PrimaryScreen.WorkingArea.Left;
+                }
+                else
+                {
+                    // タスクバーは右
+                    Left = 0;
+                }
+            }
         }
 
         // アニメーションを開始するかどうかを判定する
